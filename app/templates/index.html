@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body class="bg-dark">
+    <div class="container-fluid bg-dark">
+        <h1 class="text-center text-light">Estación Meteorológica</h1>
+
+        <div class="row row-cols-1 row-cols-md-2">
+          <div class="col mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Temperatura</h5>
+                  <div class="center" id="placeholder1" style="width:600px;height:300px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Gas metano</h5>
+                  <div class="center" id="placeholder2" style="width:600px;height:300px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Humedad</h5>
+                  <div class="center" id="placeholder3" style="width:600px;height:300px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Presión</h5>
+                  <div class="center" id="placeholder4" style="width:600px;height:300px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.canvaswrapper.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.colorhelpers.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.saturated.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.browser.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.drawSeries.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.uiConstants.js') }}"></script>
+	<script type="text/javascript">
+	var d = new Date();
+    var temp = [25];
+	var gas = [50];
+	var hum = [90];
+	var pres = [1040];
+
+	for(var i=0; i<29; ++i){
+        temp.push(0);
+        gas.push(0);
+        hum.push(50);
+        pres.push(900);
+    }
+
+    var temp_plot = [];
+    var gas_plot = [];
+    var hum_plot = [];
+    var pres_plot = [];
+
+    function recorrer(){
+        temp_plot = [];
+        gas_plot = [];
+        hum_plot = [];
+        pres_plot = [];
+        for(var i=0; i<30; i++){
+            temp_plot.push([i, temp[i]]);
+            gas_plot.push([i, gas[i]]);
+            hum_plot.push([i, hum[i]]);
+            pres_plot.push([i, pres[i]]);
+        }
+	}
+
+    recorrer();
+
+	$(function() {
+
+	    var temperatura = $.plot("#placeholder1", [ temp_plot ], {
+	        series: {
+	            lines: { show: true },
+                points: { show: true },
+                color: 2
+	        },
+	        yaxis: {
+	            autoscaleMargin: 1
+	        },
+	        xaxis: {
+	            show: false
+	        }
+	    });
+
+	    var metano = $.plot("#placeholder2", [ gas_plot ], {
+	        series: {
+	            lines: { show: true },
+                points: { show: true },
+                color: 1
+	        },
+	        yaxis: {
+	            autoscaleMargin: 1
+	        },
+	        xaxis: {
+	            show: false
+	        }
+	    });
+
+	    var humedad = $.plot("#placeholder3", [ hum_plot ], {
+	        series: {
+	            lines: { show: true },
+                points: { show: true },
+                color: 4
+	        },
+	        yaxis: {
+	            autoscaleMargin: 1
+	        },
+	        xaxis: {
+	            show: false
+	        }
+	    });
+
+	    var presion = $.plot("#placeholder4", [ pres_plot ], {
+	        series: {
+	            lines: { show: true },
+                points: { show: true },
+                color: 6
+	        },
+	        yaxis: {
+	            autoscaleMargin: 1
+	        },
+	        xaxis: {
+	            show: false
+	        }
+	    });
+
+	    function getRandomArbitrary(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+        var varianza = 0;
+
+        function update(){
+            temp = temp.slice(1);
+            gas = gas.slice(1);
+            hum = hum.slice(1);
+            pres = pres.slice(1);
+
+            $.ajax({
+                url: 'http://api.openweathermap.org/data/2.5/weather?id=3688689&appid=75b7e4464ed51f2cbafafa7790654866&units=metric&lang=es',
+                type: 'GET',
+                success: function(respuesta) {
+                    varianza = getRandomArbitrary(-200, 200);
+                    temp.push(respuesta.main.temp + varianza/100);
+                    varianza = getRandomArbitrary(-100, 100);
+                    gas.push(respuesta.main.feels_like + varianza/100);
+                    varianza = getRandomArbitrary(-100, 100);
+                    hum.push(respuesta.main.humidity + varianza/100);
+                    varianza = getRandomArbitrary(-100, 100);
+                    pres.push(respuesta.main.pressure + varianza/100);
+                },
+                error: function() {
+                    console.error("No es posible completar la operación");
+                }
+            });
+
+            recorrer();
+
+            temperatura.setData([temp_plot]);
+            temperatura.draw();
+
+            metano.setData([gas_plot]);
+            metano.draw();
+
+            humedad.setData([hum_plot]);
+            humedad.draw();
+
+            presion.setData([pres_plot]);
+            presion.draw();
+
+            setTimeout(update, 1000);
+        }
+        update();
+
+        // Add the Flot version string to the footer
+
+        $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	});
+
+	</script>
+</html>
